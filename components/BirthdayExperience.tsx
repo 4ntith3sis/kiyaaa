@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, MotionConfig, motion } from "framer-motion";
 import { birthdayConfig } from "@/config/birthday";
 import { useBlowDetection } from "@/hooks/useBlowDetection";
+import { playApplause, stopApplause } from "@/lib/applause";
 import WelcomeScreen from "./WelcomeScreen";
 import BirthdayCake from "./BirthdayCake";
 import BirthdayMessage from "./BirthdayMessage";
@@ -47,15 +48,24 @@ function initialCandles(): CandleState[] {
 
 export default function BirthdayExperience({
   onReplayToOpening,
+  onBlowStart,
 }: {
   /** When provided, Replay returns to the opening card instead of the cake entry. */
   onReplayToOpening?: () => void;
+  /** Called once when a blow starts extinguishing the candles. */
+  onBlowStart?: () => void;
 }) {
   const [phase, setPhase] = useState<Phase>("welcome");
   const [candles, setCandles] = useState<CandleState[]>(initialCandles);
   const [breathPause, setBreathPause] = useState(false);
   const timersRef = useRef<number[]>([]);
   const blownRef = useRef(false);
+  // Applause fires exactly once per cake session (reset on start/replay).
+  const applausePlayedRef = useRef(false);
+  const onBlowStartRef = useRef(onBlowStart);
+  useEffect(() => {
+    onBlowStartRef.current = onBlowStart;
+  }, [onBlowStart]);
   const phaseRef = useRef<Phase>("welcome");
   useEffect(() => {
     phaseRef.current = phase;
@@ -71,6 +81,9 @@ export default function BirthdayExperience({
   const runExtinguish = useCallback((strength: number) => {
     blownRef.current = true;
     setPhase("blowing");
+    // Notify once (music stops, unicorn reacts, ...). Covers both the
+    // microphone path and the manual fallback below.
+    onBlowStartRef.current?.();
 
     // Staggered blow: each candle enters `blowing` 80ms after the previous
     // one, runs its wind sequence (faster for stronger blows), then becomes
@@ -130,6 +143,13 @@ export default function BirthdayExperience({
     if (!candles.every((c) => c === "extinguished")) return;
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setPhase("extinguishing");
+    // Last candle out → brief beat of silence → applause → confetti → message.
+    // Guarded so re-renders / state updates can never double-fire it.
+    if (!applausePlayedRef.current) {
+      applausePlayedRef.current = true;
+      const applauseId = window.setTimeout(() => playApplause(), 400);
+      timersRef.current.push(applauseId);
+    }
     const id = window.setTimeout(() => setPhase("completed"), 650);
     timersRef.current.push(id);
   }, [phase, candles]);
@@ -151,6 +171,7 @@ export default function BirthdayExperience({
 
   const handleStart = useCallback(async () => {
     blownRef.current = false;
+    applausePlayedRef.current = false;
     setCandles(initialCandles());
     setPhase("requesting");
     setBreathPause(false);
@@ -183,7 +204,9 @@ export default function BirthdayExperience({
   const handleReplay = useCallback(() => {
     clearTimers();
     blownRef.current = false;
+    applausePlayedRef.current = false;
     stopListening();
+    stopApplause();
     setCandles(initialCandles());
     if (onReplayToOpening) {
       // Back to the very first page (opening card). This unmounts the

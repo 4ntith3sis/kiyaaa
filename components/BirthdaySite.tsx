@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { AnimatePresence, MotionConfig, motion } from "framer-motion";
 import WelcomeCard from "./WelcomeCard";
 import SadCard from "./SadCard";
 import BirthdayExperience from "./BirthdayExperience";
 import AmbientBackground from "./AmbientBackground";
+import { isMusicMuted, playMusic, setMusicMuted, stopMusic } from "@/lib/music";
 
 type Scene = "welcome" | "sad" | "cake";
 
@@ -48,12 +49,75 @@ const sceneVariants = {
  */
 export default function BirthdaySite() {
   const [scene, setScene] = useState<Scene>("welcome");
+  const [musicStarted, setMusicStarted] = useState(false);
+  const [musicMuted, setMusicMutedState] = useState(isMusicMuted());
+
+  // Music starts here — and only here. playMusic() is invoked synchronously
+  // inside the click event (user gesture), then the existing navigation runs.
+  const handleYes = useCallback(() => {
+    void playMusic().then((playing) => {
+      if (playing) setMusicStarted(true);
+    });
+    setScene("cake");
+  }, []);
+
+  const handleToggleMusic = useCallback(() => {
+    setMusicMutedState((prev) => {
+      const next = !prev;
+      setMusicMuted(next);
+      return next;
+    });
+  }, []);
+
+  // When the candles are blown out, the music stops with them.
+  const handleBlowStart = useCallback(() => {
+    stopMusic();
+    setMusicStarted(false);
+  }, []);
 
   return (
     <div className="experience">
       {/* Single static backdrop for every scene — mounted once, so the
           background never transitions between pages */}
       <AmbientBackground />
+      {/* Subtle music on/off control, visible only once music has started */}
+      {musicStarted && (
+        <button
+          type="button"
+          onClick={handleToggleMusic}
+          aria-label={musicMuted ? "Turn background music on" : "Turn background music off"}
+          aria-pressed={!musicMuted}
+          title={musicMuted ? "Music off" : "Music on"}
+          className="music-toggle"
+        >
+          {musicMuted ? (
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M4 9v6h4l5 4V5L8 9H4z"
+                fill="currentColor"
+              />
+              <path
+                d="M16.5 9.5l5 5m0-5l-5 5"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
+            </svg>
+          ) : (
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor" />
+              <path
+                d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
+            </svg>
+          )}
+        </button>
+      )}
       <MotionConfig reducedMotion="user">
         <div className="scene-stack">
           <AnimatePresence>
@@ -67,7 +131,7 @@ export default function BirthdaySite() {
                 exit="gone"
               >
                 <WelcomeCard
-                  onYes={() => setScene("cake")}
+                  onYes={handleYes}
                   onNo={() => setScene("sad")}
                 />
               </motion.div>
@@ -93,7 +157,10 @@ export default function BirthdaySite() {
                 animate="show"
                 exit="gone"
               >
-                <BirthdayExperience onReplayToOpening={() => setScene("welcome")} />
+                <BirthdayExperience
+                  onReplayToOpening={() => setScene("welcome")}
+                  onBlowStart={handleBlowStart}
+                />
               </motion.div>
             )}
           </AnimatePresence>

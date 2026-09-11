@@ -1221,6 +1221,41 @@ body {
   100% { transform: translateY(26px); opacity: 0; }
 }
 
+/* ---------- background music toggle (only visual addition) ---------- */
+
+.music-toggle {
+  position: fixed;
+  right: 14px;
+  bottom: 14px;
+  z-index: 60;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 2px solid #4a3226;
+  background: #fffdf6;
+  color: #4a3325;
+  box-shadow: 0 3px 0 #4a3226;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.music-toggle:hover {
+  transform: scale(1.06);
+}
+
+.music-toggle:active {
+  transform: scale(0.94);
+  box-shadow: 0 1px 0 #4a3226;
+}
+
+.music-toggle svg {
+  width: 22px;
+  height: 22px;
+}
+
 /* ---------- responsive refinements ---------- */
 
 @media (max-width: 640px) {
