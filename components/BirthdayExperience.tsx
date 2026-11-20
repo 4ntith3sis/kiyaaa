@@ -173,18 +173,19 @@ export default function BirthdayExperience({
   }, []);
 
   const handleStart = useCallback(async () => {
+    // Start local music while the tap is still a browser user gesture.
     onStartMusic?.();
     blownRef.current = false;
     applausePlayedRef.current = false;
     setCandles(initialCandles());
-    setPhase("requesting");
     setBreathPause(false);
-    const ok = await startListening();
-    if (ok) {
-      enterListening();
-    } else {
-      setPhase("mic-error");
-    }
+    // Yield one frame so the cake scene paints before the mic permission prompt.
+    await new Promise<void>((resolve) => window.requestAnimationFrame(() => resolve()));
+    setPhase("requesting");
+    const listeningPromise = startListening();
+    const ok = await listeningPromise;
+    if (ok) enterListening();
+    else setPhase("mic-error");
   }, [startListening, enterListening, onStartMusic]);
 
   const handleRetry = useCallback(async () => {

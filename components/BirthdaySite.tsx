@@ -58,8 +58,10 @@ export default function BirthdaySite() {
   }, []);
 
   const handleStartCandles = useCallback(() => {
-    void playMusic().then((playing) => {
-      if (playing) setMusicStarted(true);
+    const playPromise = playMusic();
+    setMusicStarted(true);
+    void playPromise.then((playing) => {
+      if (!playing) setMusicStarted(false);
     });
   }, []);
 

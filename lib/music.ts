@@ -4,7 +4,7 @@
  * - Exactly one HTMLAudioElement exists per page load (module singleton),
  *   so React re-renders can never stack duplicate audio.
  * - The element is created lazily on first play: zero network activity
- *   until the user clicks "yes please".
+ *   until the user clicks "Light the Candles".
  * - `playMusic()` must be invoked directly inside the click handler so the
  *   browser counts it as a user gesture (no autoplay on page load).
  * - Audio is local only (`public/audio/birthday-music.mp3`) — no streams,
@@ -33,7 +33,7 @@ export function isMusicMuted(): boolean {
   return muted;
 }
 
-/** Call directly from the "yes please" click handler. */
+/** Call directly from the "Light the Candles" click handler. */
 export async function playMusic(): Promise<boolean> {
   const el = getAudio();
   if (!el) return false;

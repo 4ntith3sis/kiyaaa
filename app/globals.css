@@ -1,8 +1,9 @@
 @import "tailwindcss";
 
 @theme inline {
-  --font-display: var(--font-display);
-  --font-body: var(--font-body);
+  --font-display: Georgia, "Times New Roman", serif;
+  --font-body: Arial, Helvetica, sans-serif;
+  --font-playful: "Trebuchet MS", "Comic Sans MS", ui-rounded, sans-serif;
   --color-cream: #f7ead9;
   --color-gold: #d4af7a;
   --color-gold-light: #e8c884;
@@ -36,17 +37,17 @@ body {
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.45 0 0 0 0 0.45 0 0 0 0 0.45 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23p)'/%3E%3C/svg%3E");
   background-attachment: fixed;
   color: #4a3325;
-  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-body);
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
 
 .font-display {
-  font-family: var(--font-display), Georgia, serif;
+  font-family: var(--font-display);
 }
 
 .font-playful {
-  font-family: var(--font-playful), "Comic Sans MS", ui-rounded, sans-serif;
+  font-family: var(--font-playful);
 }
 
 /* ---------- layout ---------- */
@@ -99,7 +100,7 @@ body {
 }
 
 .eyebrow {
-  font-family: var(--font-playful), ui-rounded, sans-serif;
+  font-family: var(--font-playful);
   font-weight: 600;
   font-size: clamp(0.85rem, 2.4vw, 1rem);
   letter-spacing: 0.14em;
@@ -108,7 +109,7 @@ body {
 }
 
 .display-title {
-  font-family: var(--font-playful), ui-rounded, sans-serif;
+  font-family: var(--font-playful);
   font-size: clamp(2.4rem, 8vw, 4.6rem);
   line-height: 1.05;
   font-weight: 600;
@@ -135,7 +136,7 @@ body {
   margin-top: 0.6rem;
   padding: 0.9rem 2.1rem;
   border-radius: 999px;
-  font-family: var(--font-playful), ui-rounded, sans-serif;
+  font-family: var(--font-playful);
   font-weight: 600;
   font-size: 1.05rem;
   letter-spacing: 0.01em;
@@ -187,7 +188,7 @@ body {
   padding: 0.9rem 2.1rem;
   border-radius: 999px;
   border: 2.5px solid #4a3226;
-  font-family: var(--font-playful), ui-rounded, sans-serif;
+  font-family: var(--font-playful);
   font-size: 1.02rem;
   font-weight: 600;
   color: #4a3325;
@@ -243,7 +244,7 @@ body {
 }
 
 .instruction {
-  font-family: var(--font-playful), ui-rounded, sans-serif;
+  font-family: var(--font-playful);
   font-weight: 500;
   font-size: clamp(1.4rem, 4.5vw, 2rem);
   color: #4a3325;
@@ -255,7 +256,7 @@ body {
 }
 
 .blow-feedback {
-  font-family: var(--font-playful), ui-rounded, sans-serif;
+  font-family: var(--font-playful);
   color: #9a6b23;
   font-size: 1rem;
   letter-spacing: 0.02em;
@@ -724,7 +725,7 @@ body {
 .message-title {
   position: relative;
   z-index: 1;
-  font-family: var(--font-playful), ui-rounded, sans-serif;
+  font-family: var(--font-playful);
   font-weight: 600;
   font-size: clamp(1.9rem, 7vw, 3rem);
   line-height: 1.1;
@@ -756,7 +757,7 @@ body {
   display: block;
   margin-top: -0.25rem;
   color: currentColor;
-  font-family: var(--font-playful), ui-rounded, sans-serif;
+  font-family: var(--font-playful);
   font-size: clamp(0.55rem, 1.8vw, 0.75rem);
   font-weight: 700;
   line-height: 1;
@@ -789,7 +790,7 @@ body {
   position: relative;
   z-index: 1;
   margin-top: 1.2rem;
-  font-family: var(--font-playful), ui-rounded, sans-serif;
+  font-family: var(--font-playful);
   font-style: normal;
   font-size: clamp(0.98rem, 2.8vw, 1.12rem);
   font-weight: 600;
@@ -807,7 +808,7 @@ body {
 
 .message-signature {
   margin-top: 1.2rem !important;
-  font-family: var(--font-display), Georgia, serif;
+  font-family: var(--font-display);
   font-size: 0.95rem;
   font-weight: 400;
   color: #9a6b23;
