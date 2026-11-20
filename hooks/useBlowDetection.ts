@@ -190,6 +190,19 @@ export function useBlowDetection(
     cleanupNodes();
 
     try {
+      const Ctx =
+        window.AudioContext ??
+        (window as unknown as { webkitAudioContext?: typeof AudioContext })
+          .webkitAudioContext;
+      if (!Ctx) {
+        setMicrophoneError("unsupported");
+        return false;
+      }
+      // iOS Safari requires AudioContext.resume() to happen in the same user
+      // activation as the tap. Create and resume it before awaiting permission.
+      const ctx = new Ctx();
+      audioCtxRef.current = ctx;
+      const resumePromise = ctx.state === "suspended" ? ctx.resume() : Promise.resolve();
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: {
           // Echo cancellation on (harmless for blows, helps laptop
@@ -206,20 +219,7 @@ export function useBlowDetection(
         return false;
       }
       streamRef.current = stream;
-
-      const Ctx =
-        window.AudioContext ??
-        (window as unknown as { webkitAudioContext?: typeof AudioContext })
-          .webkitAudioContext;
-      if (!Ctx) {
-        setMicrophoneError("unsupported");
-        return false;
-      }
-      const ctx = new Ctx();
-      audioCtxRef.current = ctx;
-      if (ctx.state === "suspended") {
-        await ctx.resume().catch(() => undefined);
-      }
+      await resumePromise.catch(() => undefined);
 
       const source = ctx.createMediaStreamSource(stream);
       const analyser = ctx.createAnalyser();

@@ -1,9 +1,12 @@
 @import "tailwindcss";
+@import "@fontsource-variable/cormorant-garamond";
+@import "@fontsource-variable/fredoka";
+@import "@fontsource-variable/inter";
 
 @theme inline {
-  --font-display: Georgia, "Times New Roman", serif;
-  --font-body: Arial, Helvetica, sans-serif;
-  --font-playful: "Trebuchet MS", "Comic Sans MS", ui-rounded, sans-serif;
+  --font-display: "Cormorant Garamond Variable", Georgia, serif;
+  --font-body: "Inter Variable", Arial, sans-serif;
+  --font-playful: "Fredoka Variable", "Comic Sans MS", sans-serif;
   --color-cream: #f7ead9;
   --color-gold: #d4af7a;
   --color-gold-light: #e8c884;
@@ -1404,6 +1407,12 @@ body {
   }
   .unicorn {
     width: min(62vw, 220px);
+  }
+  .btn-premium,
+  .btn-ghost,
+  .manual-link {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
   }
 }
 

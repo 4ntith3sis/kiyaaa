@@ -179,9 +179,9 @@ export default function BirthdayExperience({
     applausePlayedRef.current = false;
     setCandles(initialCandles());
     setBreathPause(false);
-    // Yield one frame so the cake scene paints before the mic permission prompt.
-    await new Promise<void>((resolve) => window.requestAnimationFrame(() => resolve()));
     setPhase("requesting");
+    // Call getUserMedia immediately in the original tap handler. Mobile Safari
+    // can drop the user-gesture permission if we defer the request to a frame.
     const listeningPromise = startListening();
     const ok = await listeningPromise;
     if (ok) enterListening();
@@ -257,6 +257,13 @@ export default function BirthdayExperience({
                   <p className="eyebrow">Preparing the magic</p>
                   <p className="instruction">Requesting microphone access…</p>
                   <div className="spinner" aria-hidden="true" />
+                  <button
+                    type="button"
+                    className="btn-ghost btn-small"
+                    onClick={handleManualBlow}
+                  >
+                    Continue without microphone
+                  </button>
                 </motion.div>
               )}
 
@@ -354,7 +361,7 @@ export default function BirthdayExperience({
               )}
 
               {/* Gentle manual fallback while listening (small, secondary) */}
-              {phase === "listening" && (
+              {(phase === "listening" || phase === "ready") && (
                 <button
                   type="button"
                   onClick={handleManualBlow}
