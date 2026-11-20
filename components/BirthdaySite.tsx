@@ -27,7 +27,7 @@ const sceneVariants = {
     opacity: 1,
     scale: 1,
     y: 0,
-    filter: "blur(0px)",
+    filter: "none",
     transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] as const },
   },
   gone: {

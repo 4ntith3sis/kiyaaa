@@ -310,7 +310,7 @@ export function useBlowDetection(
         const wNext = wPrev + (wTarget - wPrev) * (wTarget > wPrev ? 0.5 : 0.15);
         windRef.current = wNext;
 
-        if (now - lastUiUpdateRef.current > VOLUME_UI_UPDATE_MS) {
+          if (now - lastUiUpdateRef.current > VOLUME_UI_UPDATE_MS) {
           lastUiUpdateRef.current = now;
           // Normalise for UI: map 0..0.6 RMS to 0..1
           setVolume(Math.min(1, current / 0.6));

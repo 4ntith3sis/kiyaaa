@@ -202,6 +202,9 @@ export default function BirthdayExperience({
   const handleManualBlow = useCallback(() => {
     // Manual fallback runs the same cinematic sequence without the mic.
     if (blownRef.current) return;
+    if (phaseRef.current === "requesting") {
+      setPhase("ready");
+    }
     stopListening();
     runExtinguish(0.6);
   }, [runExtinguish, stopListening]);

@@ -65,4 +65,5 @@ export const RELEASE_MS = 160;
 export const BLOW_COOLDOWN_MS = 800;
 
 export const FFT_SIZE = 2048;
-export const VOLUME_UI_UPDATE_MS = 100;
+// Keep state-driven visualizer updates modest; audio sampling still runs each frame.
+export const VOLUME_UI_UPDATE_MS = 180;
