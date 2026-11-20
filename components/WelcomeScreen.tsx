@@ -34,7 +34,7 @@ export default function WelcomeScreen({ onStart }: { onStart: () => void }) {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.55, duration: 0.6 }}
       >
-        Close your eyes, take a breath — then light the candles.
+        Close your eyes, take a breath then blow out the candles.
       </motion.p>
       <motion.button
         type="button"

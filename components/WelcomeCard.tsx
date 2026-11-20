@@ -24,25 +24,15 @@ export default function WelcomeCard({ onYes, onNo }: WelcomeCardProps) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.12, duration: 0.5 }}
       >
-        hello
+        alloo kiyaaa
       </motion.h1>
-      <motion.p
-        className="card-lorem"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.22, duration: 0.5 }}
-      >
-        Lorem ipsum
-      </motion.p>
       <motion.p
         className="card-question font-playful"
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.32, duration: 0.5 }}
       >
-        do you wanna see
-        <br />
-        your gift?
+        wanna see your gift?
       </motion.p>
       <motion.div
         className="card-btn-row"

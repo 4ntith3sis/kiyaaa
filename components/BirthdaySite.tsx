@@ -52,13 +52,15 @@ export default function BirthdaySite() {
   const [musicStarted, setMusicStarted] = useState(false);
   const [musicMuted, setMusicMutedState] = useState(isMusicMuted());
 
-  // Music starts here — and only here. playMusic() is invoked synchronously
-  // inside the click event (user gesture), then the existing navigation runs.
+  // Enter the cake experience; music begins from its Light the Candles button.
   const handleYes = useCallback(() => {
+    setScene("cake");
+  }, []);
+
+  const handleStartCandles = useCallback(() => {
     void playMusic().then((playing) => {
       if (playing) setMusicStarted(true);
     });
-    setScene("cake");
   }, []);
 
   const handleToggleMusic = useCallback(() => {
@@ -160,6 +162,7 @@ export default function BirthdaySite() {
                 <BirthdayExperience
                   onReplayToOpening={() => setScene("welcome")}
                   onBlowStart={handleBlowStart}
+                  onStartMusic={handleStartCandles}
                 />
               </motion.div>
             )}

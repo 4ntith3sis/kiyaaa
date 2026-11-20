@@ -704,6 +704,8 @@ body {
 /* ---------- message ---------- */
 
 .message-card {
+  position: relative;
+  isolation: isolate;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -720,6 +722,8 @@ body {
 }
 
 .message-title {
+  position: relative;
+  z-index: 1;
   font-family: var(--font-playful), ui-rounded, sans-serif;
   font-weight: 600;
   font-size: clamp(1.9rem, 7vw, 3rem);
@@ -728,17 +732,84 @@ body {
   text-wrap: balance;
 }
 
+.message-stickers {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.message-sticker {
+  position: absolute;
+  display: block;
+  width: clamp(4rem, 13vw, 6.5rem);
+  opacity: 0.15;
+  color: #6e4b5e;
+  filter: saturate(0.8);
+}
+
+.message-sticker svg { display: block; width: 100%; height: auto; }
+.sticker-cat { top: 4%; left: 3%; transform: rotate(-14deg); }
+.sticker-hamster { right: 2%; top: 38%; transform: rotate(12deg); }
+.hamster-caption {
+  display: block;
+  margin-top: -0.25rem;
+  color: currentColor;
+  font-family: var(--font-playful), ui-rounded, sans-serif;
+  font-size: clamp(0.55rem, 1.8vw, 0.75rem);
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+}
+.sticker-tooth { bottom: 2%; left: 5%; width: clamp(3rem, 9vw, 4.5rem); transform: rotate(-10deg); }
+.sticker-balloons { top: 3%; right: 5%; width: clamp(3.8rem, 11vw, 5.5rem); color: #76546b; }
+.sticker-flower { bottom: 3%; right: 4%; width: clamp(3.5rem, 10vw, 5rem); color: #76546b; }
+
 .message-body {
+  position: relative;
+  z-index: 1;
   color: rgba(74, 51, 37, 0.85);
   font-size: clamp(0.98rem, 2.8vw, 1.12rem);
   line-height: 1.7;
   max-width: 32rem;
+  text-align: left;
+}
+
+.message-paragraph {
+  display: block;
+}
+
+.message-paragraph + .message-paragraph {
+  margin-top: 1rem;
 }
 
 .message-closing {
+  position: relative;
+  z-index: 1;
+  margin-top: 1.2rem;
+  font-family: var(--font-playful), ui-rounded, sans-serif;
+  font-style: normal;
+  font-size: clamp(0.98rem, 2.8vw, 1.12rem);
+  font-weight: 600;
+  line-height: 1.7;
+  color: rgba(74, 51, 37, 0.85);
+}
+
+.message-closing-line {
+  display: block;
+}
+
+.message-closing-line + .message-closing-line {
+  margin-top: 0.9rem;
+}
+
+.message-signature {
+  margin-top: 1.2rem !important;
   font-family: var(--font-display), Georgia, serif;
-  font-style: italic;
-  font-size: 1.15rem;
+  font-size: 0.95rem;
+  font-weight: 400;
   color: #9a6b23;
 }
 
@@ -1070,10 +1141,10 @@ body {
   background: #ffffff;
 }
 
-/* ---------- unicorn ---------- */
+/* ---------- cute cat companion ---------- */
 
 .unicorn {
-  width: min(56vw, 230px);
+  width: min(56vw, 210px);
 }
 
 .unicorn-svg {
@@ -1089,6 +1160,33 @@ body {
 .unicorn .u-mane,
 .unicorn .u-pillow {
   transform-box: fill-box;
+}
+
+.cat-mouth-open,
+.cat-tongue {
+  transform-box: fill-box;
+  transform-origin: center top;
+  animation: cat-meow 1s ease-in-out infinite;
+}
+
+.cat-tongue {
+  transform: translateY(0);
+  fill: #f28c9b;
+  opacity: 0;
+  animation: cat-tongue-show 1s ease-in-out infinite;
+}
+
+.cat-tongue {
+  animation-name: cat-tongue-show;
+}
+
+.unicorn-sad .cat-mouth-open,
+.unicorn-sad .cat-tongue {
+  animation-duration: 1.5s;
+}
+
+.cat-tears {
+  animation: cat-tears 1.5s ease-in-out infinite;
 }
 
 .unicorn .u-leg {
@@ -1221,6 +1319,26 @@ body {
   100% { transform: translateY(26px); opacity: 0; }
 }
 
+@keyframes cat-meow {
+  0%, 100% { ry: 0; }
+  35%, 65% { ry: 4px; }
+}
+
+@keyframes cat-mouth-gradient {
+  0%, 100% { stop-color: #7d344e; }
+  50% { stop-color: #3b1838; }
+}
+
+@keyframes cat-tongue-show {
+  0%, 100% { opacity: 0; transform: scaleY(0); }
+  35%, 65% { opacity: 1; transform: scaleY(1); }
+}
+
+@keyframes cat-tears {
+  0%, 100% { opacity: 0.65; transform: translateY(0); }
+  50% { opacity: 1; transform: translateY(7px); }
+}
+
 /* ---------- background music toggle (only visual addition) ---------- */
 
 .music-toggle {
@@ -1309,6 +1427,11 @@ body {
   .unicorn-sad .unicorn-svg,
   .unicorn-happy .u-pillow,
   .unicorn-sad .u-tear {
+    animation: none !important;
+  }
+  .cat-mouth-open,
+  .cat-tongue,
+  .cat-tears {
     animation: none !important;
   }
   .flame-svg {

@@ -51,20 +51,6 @@ const dropTransition = (delay: number) => ({
 
 const INK = "#2b1a12";
 
-/** Wavy frosting-drip bottom edge returning from right to left. */
-function scallops(x: number, y: number, w: number, depths: number[]): string {
-  const n = depths.length;
-  const seg = w / n;
-  let d = `M ${x + w} ${y} `;
-  for (let i = n - 1; i >= 0; i--) {
-    const x1 = x + (i + 1) * seg;
-    const x0 = x + i * seg;
-    const mid = (x0 + x1) / 2;
-    d += `Q ${mid} ${y + depths[i] * 2} ${x0} ${y} `;
-  }
-  return d;
-}
-
 const SPRINKLES: { cx: number; cy: number; r: number; fill: string }[] = [
   { cx: 108, cy: 196, r: 7, fill: "#e2608a" },
   { cx: 142, cy: 208, r: 6, fill: "#3fa7d6" },
@@ -129,8 +115,18 @@ export default function BirthdayCake({
             <feGaussianBlur stdDeviation="10" />
           </filter>
           <clipPath id="bodyClip">
-            <path d="M70,215 H330 V372 Q330,400 302,400 H98 Q70,400 70,372 Z" />
+            <path d="M76,219 H324 V368 Q324,392 300,392 H100 Q76,392 76,368 Z" />
           </clipPath>
+          <linearGradient id="cakeSide" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stopColor="#fff2de" />
+            <stop offset="0.18" stopColor="#f8e7ca" />
+            <stop offset="0.82" stopColor="#f2dfc0" />
+            <stop offset="1" stopColor="#e8cba5" />
+          </linearGradient>
+          <linearGradient id="cakeTop" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stopColor="#fffef9" />
+            <stop offset="1" stopColor="#f6ead8" />
+          </linearGradient>
         </defs>
 
         {/* floating confetti dots, like the reference background */}
@@ -172,19 +168,19 @@ export default function BirthdayCake({
           transition={dropTransition(0.15)}
         >
           <path
-            d="M70,215 H330 V372 Q330,400 302,400 H98 Q70,400 70,372 Z"
-            fill="url(#bodyCream)"
+            d="M70,222 C70,208 97,198 137,197 H263 C303,198 330,208 330,222 V365 Q330,400 298,400 H102 Q70,400 70,365 Z"
+            fill="url(#cakeSide)"
           />
           <g clipPath="url(#bodyClip)">
-            <rect x="70" y="268" width="260" height="16" fill="#f0aeb9" />
-            <rect x="70" y="312" width="260" height="36" fill="#f2b3bd" />
-            <rect x="70" y="360" width="260" height="40" fill="#f0aeb9" />
+            <rect x="70" y="268" width="260" height="16" fill="#efaab8" />
+            <rect x="70" y="312" width="260" height="36" fill="#f3bac4" />
+            <rect x="70" y="360" width="260" height="40" fill="#efaab8" />
             {/* soft side shading for a hint of volume */}
-            <rect x="70" y="215" width="26" height="185" fill="rgba(255,255,255,0.35)" />
-            <rect x="304" y="215" width="26" height="185" fill="rgba(150,80,90,0.18)" />
+            <rect x="70" y="215" width="26" height="185" fill="rgba(255,255,255,0.22)" />
+            <rect x="304" y="215" width="26" height="185" fill="rgba(110,55,45,0.12)" />
           </g>
           <path
-            d="M70,215 H330 V372 Q330,400 302,400 H98 Q70,400 70,372 Z"
+            d="M70,222 C70,208 97,198 137,197 H263 C303,198 330,208 330,222 V365 Q330,400 298,400 H102 Q70,400 70,365 Z"
             fill="none"
             stroke={INK}
             strokeWidth="5"
@@ -199,14 +195,14 @@ export default function BirthdayCake({
           transition={dropTransition(0.55)}
         >
           <path
-            d={`M62,208 C62,186 115,176 200,176 C285,176 338,186 338,208 L338,240 ${scallops(62, 240, 276, [16, 22, 14, 24, 18, 22, 14, 20])} L62,208 Z`}
+            d={`M62,211 C62,188 112,176 200,176 C288,176 338,188 338,211 L338,237 Q333,242 328,237 Q319,231 309,239 Q299,247 289,239 Q279,231 269,239 Q259,247 249,239 Q239,231 229,239 Q219,247 209,239 Q199,231 189,239 Q179,247 169,239 Q159,231 149,239 Q139,247 129,239 Q119,231 109,239 Q99,247 89,239 Q79,231 69,239 L62,237 Z`}
             fill="#fffdf6"
             stroke={INK}
             strokeWidth="5"
             strokeLinejoin="round"
           />
           {/* top surface covers the top-edge stroke */}
-          <ellipse cx="200" cy="205" rx="136" ry="28" fill="#fffdf6" />
+            <ellipse cx="200" cy="211" rx="136" ry="29" fill="url(#cakeTop)" />
           {/* tiny grey speckles on the frosting */}
           {SPECKLES.map((s, i) => (
             <circle

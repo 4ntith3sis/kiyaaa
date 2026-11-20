@@ -49,11 +49,14 @@ function initialCandles(): CandleState[] {
 export default function BirthdayExperience({
   onReplayToOpening,
   onBlowStart,
+  onStartMusic,
 }: {
   /** When provided, Replay returns to the opening card instead of the cake entry. */
   onReplayToOpening?: () => void;
   /** Called once when a blow starts extinguishing the candles. */
   onBlowStart?: () => void;
+  /** Called from the Light the Candles click to start background music. */
+  onStartMusic?: () => void;
 }) {
   const [phase, setPhase] = useState<Phase>("welcome");
   const [candles, setCandles] = useState<CandleState[]>(initialCandles);
@@ -170,6 +173,7 @@ export default function BirthdayExperience({
   }, []);
 
   const handleStart = useCallback(async () => {
+    onStartMusic?.();
     blownRef.current = false;
     applausePlayedRef.current = false;
     setCandles(initialCandles());
@@ -181,7 +185,7 @@ export default function BirthdayExperience({
     } else {
       setPhase("mic-error");
     }
-  }, [startListening, enterListening]);
+  }, [startListening, enterListening, onStartMusic]);
 
   const handleRetry = useCallback(async () => {
     blownRef.current = false;
